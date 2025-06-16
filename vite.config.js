@@ -40,6 +40,11 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    port: 3000,
+    open: true,
+    host: true,
+  },
   build: {
     rollupOptions: {
       output: {
@@ -54,10 +59,5 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["react", "react-dom", "react-router-dom"],
-  },
-  server: {
-    headers: {
-      "Content-Type": "application/javascript",
-    },
   },
 });

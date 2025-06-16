@@ -25,13 +25,6 @@ const ImageDetail = () => {
     }
   }, [image]);
 
-  console.log("Initial isFlipped state:", isFlipped);
-
-  console.log("Image object:", image);
-  if (image) {
-    console.log("Image URL:", image.url);
-  }
-
   if (!image) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center overflow-hidden">
@@ -62,7 +55,7 @@ const ImageDetail = () => {
       </button>
 
       <div className="w-full max-w-6xl px-8 flex flex-col items-center justify-center">
-        <div className="relative w-[400px] h-[500px] perspective-1000">
+        <div className="relative w-[400px] h-[500px] perspective-1000 px-8">
           <AnimatePresence mode="wait">
             {isLoading && (
               <motion.div
