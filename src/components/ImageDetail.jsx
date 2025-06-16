@@ -1,6 +1,6 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const ImageDetail = () => {
   const navigate = useNavigate();
@@ -8,6 +8,22 @@ const ImageDetail = () => {
   const { image } = location.state || {};
   const [isFlipped, setIsFlipped] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (image) {
+      setIsLoading(true);
+      const img = new Image();
+      img.src = image.url;
+      img.onload = () => {
+        setIsImageLoaded(true);
+        setIsLoading(false);
+      };
+      img.onerror = () => {
+        setIsLoading(false);
+      };
+    }
+  }, [image]);
 
   console.log("Initial isFlipped state:", isFlipped);
 
@@ -47,6 +63,22 @@ const ImageDetail = () => {
 
       <div className="w-full max-w-6xl px-8 flex flex-col items-center justify-center">
         <div className="relative w-[400px] h-[500px] perspective-1000">
+          <AnimatePresence mode="wait">
+            {isLoading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute inset-0 flex items-center justify-center bg-gray-800 rounded-2xl"
+              >
+                <div className="flex flex-col items-center">
+                  <div className="w-12 h-12 border-4 border-white/20 border-t-white rounded-full animate-spin mb-4"></div>
+                  <p className="text-white/80 text-sm">Yükleniyor...</p>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           <motion.div
             className="relative w-full h-full transition-transform duration-700 transform-style-3d"
             animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -58,18 +90,14 @@ const ImageDetail = () => {
               className="absolute w-full h-full backface-hidden rounded-2xl overflow-hidden bg-white shadow-xl"
               style={{ backfaceVisibility: "hidden" }}
             >
-              {!isImageLoaded && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
-                  <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
-                </div>
-              )}
-              <img
+              <motion.img
                 src={image.url}
                 alt={image.title}
-                className={`w-full h-full object-cover transition-opacity duration-300 ${
-                  isImageLoaded ? "opacity-100" : "opacity-0"
-                }`}
-                loading="lazy"
+                className="w-full h-full object-cover"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: isImageLoaded ? 1 : 0 }}
+                transition={{ duration: 0.3 }}
+                loading="eager"
                 onLoad={() => setIsImageLoaded(true)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />

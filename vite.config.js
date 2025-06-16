@@ -1,13 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import md from "vite-plugin-md";
-import viteImagemin from "vite-plugin-imagemin";
+import imagemin from "vite-plugin-imagemin";
 
 export default defineConfig({
   plugins: [
     react(),
-    md(),
-    viteImagemin({
+    imagemin({
       gifsicle: {
         optimizationLevel: 7,
         interlaced: false,
@@ -33,6 +31,11 @@ export default defineConfig({
           },
         ],
       },
+      webp: {
+        quality: 80,
+        lossless: false,
+        effort: 6,
+      },
     }),
   ],
   build: {
@@ -40,10 +43,14 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "react-router-dom"],
-          images: [/\.(png|jpe?g|gif|svg|webp)$/],
+          images: [/\.(png|jpe?g|gif|webp)$/],
         },
       },
     },
-    assetsInlineLimit: 4096, // 4kb'den küçük resimleri base64'e dönüştür
+    assetsInlineLimit: 4096, // 4kb'den küçük dosyaları base64'e dönüştür
+    chunkSizeWarningLimit: 1000,
+  },
+  optimizeDeps: {
+    include: ["react", "react-dom", "react-router-dom"],
   },
 });
