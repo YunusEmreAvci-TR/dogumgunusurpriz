@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -7,6 +7,7 @@ const ImageDetail = () => {
   const location = useLocation();
   const { image } = location.state || {};
   const [isFlipped, setIsFlipped] = useState(false);
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
 
   console.log("Initial isFlipped state:", isFlipped);
 
@@ -45,7 +46,7 @@ const ImageDetail = () => {
       </button>
 
       <div className="w-full max-w-6xl px-8 flex flex-col items-center justify-center">
-        <div className="relative w-[400px] h-[600px] perspective-1000 px-8">
+        <div className="relative w-[400px] h-[500px] perspective-1000">
           <motion.div
             className="relative w-full h-full transition-transform duration-700 transform-style-3d"
             animate={{ rotateY: isFlipped ? 180 : 0 }}
@@ -57,10 +58,19 @@ const ImageDetail = () => {
               className="absolute w-full h-full backface-hidden rounded-2xl overflow-hidden bg-white shadow-xl"
               style={{ backfaceVisibility: "hidden" }}
             >
+              {!isImageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-800">
+                  <div className="w-8 h-8 border-4 border-white/20 border-t-white rounded-full animate-spin"></div>
+                </div>
+              )}
               <img
                 src={image.url}
                 alt={image.title}
-                className="w-full h-full object-cover"
+                className={`w-full h-full object-cover transition-opacity duration-300 ${
+                  isImageLoaded ? "opacity-100" : "opacity-0"
+                }`}
+                loading="lazy"
+                onLoad={() => setIsImageLoaded(true)}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
               <button
