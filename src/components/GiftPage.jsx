@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { Snackbar, Alert, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import "../styles/GiftPage.css";
-import Rose from "../assets/images/blue.png";
-import Hurrem from "../assets/images/maxresdefault.jpg";
+import Rose from "../assets/images/blue.webp";
+import Hurrem from "../assets/images/maxresdefault.webp";
 
 const GiftPage = () => {
   const navigate = useNavigate();
