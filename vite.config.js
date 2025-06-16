@@ -43,14 +43,19 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ["react", "react-dom", "react-router-dom"],
-          images: [/\.(png|jpe?g|gif|webp)$/],
         },
       },
     },
-    assetsInlineLimit: 4096, // 4kb'den küçük dosyaları base64'e dönüştür
+    assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1000,
+    sourcemap: true,
   },
   optimizeDeps: {
     include: ["react", "react-dom", "react-router-dom"],
+  },
+  server: {
+    headers: {
+      "Content-Type": "application/javascript",
+    },
   },
 });
