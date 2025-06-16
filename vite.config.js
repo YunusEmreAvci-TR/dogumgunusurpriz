@@ -14,10 +14,11 @@ export default defineConfig({
         optimizationLevel: 7,
       },
       mozjpeg: {
-        quality: 80,
+        quality: 60,
+        progressive: true,
       },
       pngquant: {
-        quality: [0.8, 0.9],
+        quality: [0.6, 0.8],
         speed: 4,
       },
       svgo: {
@@ -32,9 +33,10 @@ export default defineConfig({
         ],
       },
       webp: {
-        quality: 80,
+        quality: 60,
         lossless: false,
         effort: 6,
+        method: 6,
       },
     }),
   ],
